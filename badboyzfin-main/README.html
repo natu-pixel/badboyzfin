@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>badboyzfin — Jellyfin Theme</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --text: #e8e8e8;
+    --muted: #666;
+    --green: #00ff88;
+    --red: #ff4545;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Background grid ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #fff;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .tagline {
+    margin-top: 14px;
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 460px;
+    line-height: 1.6;
+  }
+
+  .version-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.25);
+    padding: 6px 14px;
+    border-radius: 3px;
+    white-space: nowrap;
+    align-self: start;
+    margin-top: 4px;
+  }
+
+  /* ── Fix notice ── */
+  .fix-banner {
+    background: linear-gradient(135deg, rgba(0,255,136,0.07), rgba(0,212,255,0.05));
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fix-banner::before {
+    content: 'FIX';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 4rem;
+    font-weight: 700;
+    color: rgba(0,255,136,0.05);
+    letter-spacing: -0.05em;
+    pointer-events: none;
+  }
+
+  .fix-banner h2 {
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  .fix-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fix-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .fix-list li::before {
+    content: '✓';
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .fix-list code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8em;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* ── Section heading ── */
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Install block ── */
+  .install-block {
+    margin-bottom: 56px;
+  }
+
+  .code-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .code-box-header .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .code-box pre {
+    padding: 20px 22px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: var(--text);
+  }
+
+  .code-box .cm { color: var(--muted); }
+  .code-box .ca { color: var(--accent); }
+  .code-box .co { color: var(--accent2); }
+
+  /* ── Steps ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 20px;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .step:hover {
+    border-color: rgba(0,212,255,0.25);
+    transform: translateY(-2px);
+  }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .step h3 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .step p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .step p code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75em;
+    color: var(--accent2);
+  }
+
+  /* ── M3U/IPTV section ── */
+  .iptv-block {
+    margin-bottom: 56px;
+  }
+
+  .iptv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .iptv-grid { grid-template-columns: 1fr; }
+    .hero { grid-template-columns: 1fr; }
+  }
+
+  .iptv-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .iptv-card h3 {
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .iptv-card h3 .dot-accent {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .iptv-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .iptv-card ul li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .iptv-card ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7em;
+    top: 2px;
+  }
+
+  .iptv-card ul li code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75em;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  .warning-box {
+    background: rgba(255,69,69,0.06);
+    border: 1px solid rgba(255,69,69,0.2);
+    border-radius: 6px;
+    padding: 16px 18px;
+    font-size: 0.83rem;
+    color: #ff8f8f;
+    line-height: 1.6;
+  }
+
+  .warning-box strong {
+    color: var(--red);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ── Modules table ── */
+  .modules-block { margin-bottom: 56px; }
+
+  .module-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 80px;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 0.84rem;
+  }
+
+  .module-row:first-child { border-top: 1px solid var(--border); }
+
+  .module-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .module-desc { color: var(--muted); line-height: 1.4; }
+
+  .module-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    text-align: right;
+  }
+
+  .module-status.fixed { color: var(--green); }
+  .module-status.ok { color: var(--muted); }
+
+  /* ── Footer ── */
+  footer {
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <div class="badge">Jellyfin Theme</div>
+      <h1>badboyz<span>fin</span></h1>
+      <p class="tagline">A dark glassmorphism theme for Jellyfin. Cards lift, dialogs breathe, the sidebar stays put.</p>
+    </div>
+    <div class="version-tag">v2 — FIXED</div>
+  </div>
+
+  <!-- What was fixed -->
+  <div class="fix-banner">
+    <h2>// What's fixed in v2</h2>
+    <ul class="fix-list">
+      <li>Cards (movies, series, channels) now open on click — <code>will-change</code> removed from <code>.cardBox</code> which was creating a stacking context that swallowed pointer events in Chromium &amp; WebKit</li>
+      <li>All card children explicitly get <code>pointer-events: auto</code> — overlay buttons, links, and scaler elements are all clickable</li>
+      <li>Pseudo-elements (<code>::before</code> / <code>::after</code>) set to <code>pointer-events: none</code> — decorative glows can no longer intercept taps</li>
+      <li><code>smooth-transitions</code>: replaced <code>transition: all</code> on buttons with specific properties — was accidentally transitioning <code>pointer-events</code></li>
+      <li><code>smooth-transitions</code>: page container no longer animates <code>transform</code> on load — was creating a stacking context mid-navigation</li>
+    </ul>
+  </div>
+
+  <!-- Install -->
+  <div class="install-block">
+    <div class="section-label">Installation</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01 /</div>
+        <h3>Open Dashboard</h3>
+        <p>Go to <code>Admin → Dashboard → General</code> in your Jellyfin instance.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02 /</div>
+        <h3>Custom CSS field</h3>
+        <p>Scroll to the <code>Custom CSS</code> text area at the bottom of the General settings page.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03 /</div>
+        <h3>Paste &amp; Save</h3>
+        <p>Paste the single <code>@import</code> line below. Click Save. Hard-refresh your browser.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04 /</div>
+        <h3>Self-host (optional)</h3>
+        <p>Drop the <code>theme/</code> folder on your server. Point the @import at your own URL for full control.</p>
+      </div>
+    </div>
+
+    <div class="code-box">
+      <div class="code-box-header">
+        <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <span>Custom CSS — paste this</span>
+      </div>
+      <pre><span class="cm">/* badboyzfin v2 — complete theme with click fix */</span>
+<span class="ca">@import</span> <span class="co">url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/base.css")</span>;
+<span class="ca">@import</span> <span class="co">url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/static-sidebar.css")</span>;
+<span class="ca">@import</span> <span class="co">url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/moving-cards.css")</span>;
+<span class="ca">@import</span> <span class="co">url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/smooth-transitions.css")</span>;
+
+<span class="cm">/* ── Card click fix (always include this) ── */</span>
+<span class="ca">.cardBox, .cardBox *, .card, .cardLink,
+.cardScalable, .cardOverlayContainer,
+.cardOverlayButton, .cardImageContainer { pointer-events: auto !important; }
+.cardBox::before, .cardBox::after,
+.cardBox *::before, .cardBox *::after { pointer-events: none !important; }</span></pre>
+    </div>
+  </div>
+
+  <!-- IPTV / M3U troubleshooting -->
+  <div class="iptv-block">
+    <div class="section-label">M3U / IPTV — why nothing shows up</div>
+
+    <div class="iptv-grid">
+      <div class="iptv-card">
+        <h3><span class="dot-accent"></span>M3U Tuner checklist</h3>
+        <ul>
+          <li>Use the raw file URL or absolute file path — Jellyfin can't read relative paths</li>
+          <li>Path example: <code>/config/iptv/playlist.m3u</code></li>
+          <li>Remote URL must be reachable from your <em>server</em>, not just your browser</li>
+          <li>Each stream line needs <code>#EXTINF:-1</code> before the URL</li>
+          <li>Add <code>group-title="Sports"</code> in the EXTINF tag for categories</li>
+          <li>After adding, go to <code>Dashboard → Live TV</code> and click <strong>Refresh Guide</strong></li>
+        </ul>
+      </div>
+      <div class="iptv-card">
+        <h3><span class="dot-accent"></span>XMLTV EPG checklist</h3>
+        <ul>
+          <li>File path or URL must point to a valid <code>.xml</code> or <code>.xmltv</code> file</li>
+          <li>Channel IDs in the XMLTV must match channel IDs in your M3U (the <code>tvg-id</code> attribute)</li>
+          <li>Example EXTINF: <code>#EXTINF:-1 tvg-id="bbc1" tvg-name="BBC One"</code></li>
+          <li>After saving, run the <strong>Refresh Guide</strong> scheduled task manually</li>
+          <li>EPG data can take 5–10 minutes to populate after refresh</li>
+          <li>Check <code>Dashboard → Scheduled Tasks</code> for errors</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠ Most common reason nothing shows up</strong>
+      The M3U path is correct but the stream URLs inside it use a hostname that your Jellyfin server can't resolve (e.g. <code>localhost</code> pointing to your PC instead of the IPTV provider). Open one stream URL in a browser <em>on the server machine</em> to verify it works. Also make sure your IPTV provider hasn't expired your subscription.
+    </div>
+  </div>
+
+  <!-- Modules -->
+  <div class="modules-block">
+    <div class="section-label">Included Modules</div>
+    <div class="module-row">
+      <div class="module-name">base.css</div>
+      <div class="module-desc">Core dark theme, glassmorphism cards, login form, admin colours</div>
+      <div class="module-status fixed">FIXED</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">moving-cards</div>
+      <div class="module-desc">Cards lift on hover with glow — pointer-events fully preserved</div>
+      <div class="module-status fixed">FIXED</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">smooth-transitions</div>
+      <div class="module-desc">Page/dialog/button/toast animations — no longer blocks clicks</div>
+      <div class="module-status fixed">FIXED</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">static-sidebar</div>
+      <div class="module-desc">Sidebar stays fixed while content scrolls (desktop only)</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">floating-progress</div>
+      <div class="module-desc">Rounded floating progress bars on cards and sessions</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">central-libraries-small</div>
+      <div class="module-desc">My Media icons centred on the homepage</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">hide-my-media</div>
+      <div class="module-desc">Hides the My Media section title for a cleaner home page</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">smaller-cast</div>
+      <div class="module-desc">Compact cast grid on detail pages</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">count-indicators</div>
+      <div class="module-desc">Episode/item count badges on library cards</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">change-logo</div>
+      <div class="module-desc">Swap the Jellyfin logo in the sidebar header</div>
+      <div class="module-status ok">OK</div>
+    </div>
+    <div class="module-row">
+      <div class="module-name">forgot-password</div>
+      <div class="module-desc">Styled forgot-password form</div>
+      <div class="module-status ok">OK</div>
+    </div>
+  </div>
+
+  <footer>
+    <span>badboyzfin v2 — fixed build</span>
+    <span>MIT License</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+/*
+ ╔══════════════════════════════════════════════════════════════════════╗
+ ║              badboyzfin — Complete Theme  (v2 Fixed)                ║
+ ╠══════════════════════════════════════════════════════════════════════╣
+ ║  Fixes in this release:                                             ║
+ ║  • Cards (movies, series, channels) now open on click               ║
+ ║    — removed will-change from .cardBox (stacking context bug)       ║
+ ║    — pointer-events: auto enforced on all card children             ║
+ ║    — pseudo-elements (::before/::after) set to pointer-events:none  ║
+ ║  • smooth-transitions: removed "all" from button transitions        ║
+ ║    (was accidentally transitioning pointer-events)                  ║
+ ║  • smooth-transitions: page container no longer uses transform      ║
+ ║    during load (was creating stacking context on navigation)        ║
+ ╚══════════════════════════════════════════════════════════════════════╝
+
+  HOW TO USE
+  ──────────
+  Dashboard → General → Custom CSS → paste the single @import below,
+  or host this file and @import its URL.
+
+  To use only the base theme (no modules):
+    change complete.css → base.css in the import URL.
+*/
+
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/base.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/static-sidebar.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/central-libraries-small.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/change-logo.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/count-indicators.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/forgot-password.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/hide-my-media.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/moving-cards.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/smaller-cast.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/floating-progress.css");
+@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/smooth-transitions.css");
+
+/* ══════════════════════════════════════════════════════════════════════
+   SELF-HOSTED CARD CLICK FIX
+   If you are hosting this file locally (not using the CDN imports above),
+   these overrides ensure clicks always reach card links and buttons.
+   ══════════════════════════════════════════════════════════════════════ */
+.cardBox,
+.cardBox *,
+.card,
+.cardLink,
+.cardScalable,
+.cardOverlayContainer,
+.cardOverlayButton,
+.cardOverlayButton-br,
+.cardOverlayFab-primary,
+.cardImageContainer,
+.cardContent {
+    pointer-events: auto !important;
+}
+
+.cardBox::before,
+.cardBox::after,
+.cardBox *::before,
+.cardBox *::after {
+    pointer-events: none !important;
+}

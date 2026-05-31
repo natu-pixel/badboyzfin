@@ -1,0 +1,176 @@
+/*
+    badboyzfin Smooth Transitions Module (Fixed)
+
+    Smooth page/sidebar/dialog/button animations.
+    pointer-events are never blocked — transitions only affect
+    visual properties (opacity, transform, box-shadow).
+*/
+
+:root {
+    --bbf-transition-speed: 0.28s;
+    --bbf-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --bbf-dialog-scale: 0.96;
+    --bbf-toast-distance: 20px;
+}
+
+/* ============================================
+   PAGE TRANSITIONS — opacity + subtle Y only
+   ============================================ */
+
+.mainDrawerContainer,
+.itemsContainer,
+.primaryContentWrapper,
+.layout-desktop .pageContainer,
+.layout-mobile .pageContent {
+    transition: opacity var(--bbf-transition-speed) var(--bbf-easing);
+    /* Removed transform transition: translateY during page load was
+       creating a new stacking context and eating pointer events       */
+}
+
+/* ============================================
+   SIDEBAR TRANSITIONS
+   ============================================ */
+
+.mainDrawer {
+    transition: transform var(--bbf-transition-speed) var(--bbf-easing),
+                opacity var(--bbf-transition-speed) var(--bbf-easing);
+}
+
+.drawer-open .mainDrawer {
+    transform: translateX(0) !important;
+    opacity: 1;
+}
+
+/* ============================================
+   DIALOG / MODAL
+   ============================================ */
+
+.dialog {
+    animation: bbf-dialogFadeIn 0.22s var(--bbf-easing) both;
+}
+
+.dialogBackdrop {
+    animation: bbf-backdropFadeIn 0.22s var(--bbf-easing) both;
+}
+
+@keyframes bbf-dialogFadeIn {
+    from { opacity: 0; transform: scale(var(--bbf-dialog-scale)); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bbf-backdropFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================================
+   BUTTON HOVER TRANSITIONS
+   ============================================ */
+
+.paper-icon-button-light,
+.MuiButton-root,
+.emby-button,
+.detailButton,
+.emby-tab-button,
+.btnPlay,
+.btnReplay,
+.btnDownload,
+.btnPlayTrailer,
+.btnInstantMix,
+.btnShuffle,
+.navMenuOption {
+    transition: background-color var(--bbf-transition-speed) var(--bbf-easing),
+                box-shadow var(--bbf-transition-speed) var(--bbf-easing),
+                color var(--bbf-transition-speed) var(--bbf-easing);
+    /* Removed "all" — was transitioning pointer-events unintentionally */
+}
+
+/* ============================================
+   SECTION TITLE REVEAL
+   ============================================ */
+
+.sectionTitle,
+.sectionTitleButton,
+.sectionTitleText {
+    animation: bbf-slideInLeft 0.35s var(--bbf-easing) both;
+}
+
+.sectionTitle:nth-child(1), .sectionTitleText:nth-child(1) { animation-delay: 0.05s; }
+.sectionTitle:nth-child(2), .sectionTitleText:nth-child(2) { animation-delay: 0.10s; }
+.sectionTitle:nth-child(3), .sectionTitleText:nth-child(3) { animation-delay: 0.15s; }
+.sectionTitle:nth-child(4), .sectionTitleText:nth-child(4) { animation-delay: 0.20s; }
+.sectionTitle:nth-child(5), .sectionTitleText:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes bbf-slideInLeft {
+    from { opacity: 0; transform: translateX(-12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+
+.toast {
+    transition: transform var(--bbf-transition-speed) var(--bbf-easing),
+                opacity var(--bbf-transition-speed) var(--bbf-easing);
+}
+
+.toast.toastVisible {
+    animation: bbf-toastSlideIn 0.32s var(--bbf-easing) both;
+}
+
+@keyframes bbf-toastSlideIn {
+    from { opacity: 0; transform: translateY(28px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ============================================
+   INPUT FIELD TRANSITIONS
+   ============================================ */
+
+.emby-input,
+.emby-select-withcolor,
+.emby-textarea {
+    transition: border-color var(--bbf-transition-speed) var(--bbf-easing),
+                box-shadow var(--bbf-transition-speed) var(--bbf-easing);
+}
+
+.emby-input:focus,
+.emby-textarea:focus {
+    box-shadow: inset 0 1px var(--theme-menu-shadow-colour),
+                0 0 0 2px var(--theme-menu-background-colour),
+                0 0 0 3px rgba(255, 255, 255, 0.10);
+}
+
+/* ============================================
+   PROGRESS BAR TRANSITIONS
+   ============================================ */
+
+.innerCardFooter .itemProgressBar,
+.playbackProgress > div,
+.backgroundProgress > div,
+.transcodingProgress > div,
+.taskProgressOuter,
+progress {
+    transition: width 0.5s var(--bbf-easing);
+}
+
+/* ============================================
+   SLIDER
+   ============================================ */
+
+.mdl-slider {
+    transition: background-color 0.15s ease;
+}
+
+/* ============================================
+   REDUCED MOTION (ACCESSIBILITY)
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
