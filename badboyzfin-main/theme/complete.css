@@ -1,22 +1,41 @@
+/* ============================================================
+   badboyzfin — Complete Theme + Click Fix
+   Paste this entire file into:
+   Jellyfin → Dashboard → General → Custom CSS
+   ============================================================ */
 
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/base.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/static-sidebar.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/moving-cards.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/smooth-transitions.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/floating-progress.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/central-libraries-small.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/smaller-cast.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/count-indicators.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/change-logo.css");
+@import url("https://cdn.jsdelivr.net/gh/natu-pixel/badboyzfin@main/badboyzfin-main/theme/modules/forgot-password.css");
 
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/base.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/static-sidebar.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/central-libraries-small.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/change-logo.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/count-indicators.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/forgot-password.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/hide-my-media.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/moving-cards.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/smaller-cast.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/floating-progress.css");
-@import url("https://cdn.jsdelivr.net/gh/JamsRepos/badboyzfin@latest/theme/modules/smooth-transitions.css");
+/* ============================================================
+   CARD CLICK FIX
+   The badboyzfin-cardSlideUp animation + will-change: transform
+   creates a GPU compositing layer (new stacking context) on
+   .cardBox which causes Chromium/WebKit to swallow click events
+   before they reach the <a> link inside the card.
 
-/* ══════════════════════════════════════════════════════════════════════
-   SELF-HOSTED CARD CLICK FIX
-   If you are hosting this file locally (not using the CDN imports above),
-   these overrides ensure clicks always reach card links and buttons.
-   ══════════════════════════════════════════════════════════════════════ */
+   Fix: after the animation completes (1s + longest delay),
+   remove will-change so the stacking context collapses.
+   All card children get explicit pointer-events: auto.
+   All decorative pseudo-elements get pointer-events: none
+   so glow overlays never intercept clicks.
+   ============================================================ */
+
+/* Step 1 — remove will-change after animation finishes */
+.cardBox {
+    will-change: auto !important;
+    -webkit-will-change: auto !important;
+}
+
+/* Step 2 — restore pointer-events on every interactive card element */
 .cardBox,
 .cardBox *,
 .card,
@@ -27,13 +46,42 @@
 .cardOverlayButton-br,
 .cardOverlayFab-primary,
 .cardImageContainer,
-.cardContent {
+.cardContent,
+.cardText,
+.itemSelectionPanel {
     pointer-events: auto !important;
 }
 
+/* Step 3 — decorative pseudo-elements must NEVER catch clicks */
 .cardBox::before,
 .cardBox::after,
 .cardBox *::before,
-.cardBox *::after {
+.cardBox *::after,
+.cardImageContainer::after,
+.cardOverlayContainer::after {
     pointer-events: none !important;
+}
+
+/* Step 4 — fix smooth-transitions "transition: all" on buttons
+   "all" transitions pointer-events which can delay click registration */
+.paper-icon-button-light,
+.MuiButton-root,
+.emby-button,
+.detailButton,
+.emby-tab-button,
+.btnPlay,
+.btnReplay,
+.btnDownload,
+.btnPlayTrailer,
+.btnInstantMix,
+.btnShuffle,
+.navMenuOption {
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -webkit-transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
